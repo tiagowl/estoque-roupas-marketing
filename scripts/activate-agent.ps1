@@ -1,5 +1,5 @@
-# Script para Ativar um Agente Específico
-# Ativa um agente e carrega sua configuração
+# Script para Ativar um Agente Especifico
+# Ativa um agente e carrega sua configuracao
 
 param(
     [Parameter(Mandatory=$true)]
@@ -7,7 +7,7 @@ param(
     [string]$ProjectPath = "."
 )
 
-# Lista de agentes disponíveis
+# Lista de agentes disponiveis
 $availableAgents = @{
     "product-owner" = "Product Owner"
     "architect" = "Arquiteto de Software"
@@ -20,59 +20,64 @@ $availableAgents = @{
 
 # Verificar se o agente existe
 if (!$availableAgents.ContainsKey($AgentName)) {
-    Write-Host "❌ Agente '$AgentName' não encontrado!" -ForegroundColor Red
-    Write-Host "Agentes disponíveis:" -ForegroundColor Yellow
+    Write-Host "Agente '$AgentName' nao encontrado!" -ForegroundColor Red
+    Write-Host "Agentes disponiveis:" -ForegroundColor Yellow
     foreach ($agent in $availableAgents.GetEnumerator()) {
         Write-Host "  - $($agent.Key): $($agent.Value)" -ForegroundColor Cyan
     }
     exit 1
 }
 
-Write-Host "🤖 Ativando agente: $($availableAgents[$AgentName])" -ForegroundColor Green
+Write-Host "Ativando agente: $($availableAgents[$AgentName])" -ForegroundColor Green
 
-# Carregar configuração do agente
+# Carregar configuracao do agente
 $configPath = Join-Path $PSScriptRoot "..\agents\$AgentName\config.json"
 if (Test-Path $configPath) {
-    $config = Get-Content $configPath | ConvertFrom-Json
-    Write-Host "✅ Configuração carregada" -ForegroundColor Yellow
+    try {
+        $config = Get-Content $configPath -Encoding UTF8 | ConvertFrom-Json
+        Write-Host "Configuracao carregada" -ForegroundColor Yellow
+    } catch {
+        Write-Host "Erro ao carregar configuracao: $($_.Exception.Message)" -ForegroundColor Red
+        exit 1
+    }
     
-    # Exibir informações do agente
-    Write-Host "`n📋 Informações do Agente:" -ForegroundColor Cyan
+    # Exibir informacoes do agente
+    Write-Host "`nInformacoes do Agente:" -ForegroundColor Cyan
     Write-Host "Nome: $($config.agent.name)" -ForegroundColor White
-    Write-Host "Descrição: $($config.agent.description)" -ForegroundColor White
+    Write-Host "Descricao: $($config.agent.description)" -ForegroundColor White
     Write-Host "Expertise: $($config.agent.expertise -join ', ')" -ForegroundColor White
     
     # Exibir workflow steps
-    Write-Host "`n🔄 Workflow Steps:" -ForegroundColor Cyan
+    Write-Host "`nWorkflow Steps:" -ForegroundColor Cyan
     foreach ($step in $config.agent.workflow_steps) {
         Write-Host "  $step" -ForegroundColor White
     }
     
     # Exibir outputs esperados
-    Write-Host "`n📤 Outputs Esperados:" -ForegroundColor Cyan
+    Write-Host "`nOutputs Esperados:" -ForegroundColor Cyan
     foreach ($output in $config.agent.outputs) {
         Write-Host "  - $output" -ForegroundColor White
     }
     
-    # Exibir colaborações
-    Write-Host "`n🤝 Colaborações:" -ForegroundColor Cyan
+    # Exibir colaboracoes
+    Write-Host "`nColaboracoes:" -ForegroundColor Cyan
     Write-Host "Trabalha com: $($config.agent.collaboration.works_with -join ', ')" -ForegroundColor White
     Write-Host "Recebe de: $($config.agent.collaboration.receives_from -join ', ')" -ForegroundColor White
     Write-Host "Fornece para: $($config.agent.collaboration.provides_to -join ', ')" -ForegroundColor White
     
 } else {
-    Write-Host "❌ Arquivo de configuração não encontrado: $configPath" -ForegroundColor Red
+    Write-Host "Arquivo de configuracao nao encontrado: $configPath" -ForegroundColor Red
     exit 1
 }
 
 # Carregar template de prompt
 $templatePath = Join-Path $PSScriptRoot "..\templates\$AgentName-prompt.md"
 if (Test-Path $templatePath) {
-    Write-Host "`n📝 Template de Prompt carregado:" -ForegroundColor Cyan
+    Write-Host "`nTemplate de Prompt carregado:" -ForegroundColor Cyan
     Write-Host "Arquivo: $templatePath" -ForegroundColor Yellow
     Write-Host "`nPara usar este agente, copie o template de prompt e adapte para sua necessidade." -ForegroundColor Green
 } else {
-    Write-Host "⚠️ Template de prompt não encontrado: $templatePath" -ForegroundColor Yellow
+    Write-Host "Template de prompt nao encontrado: $templatePath" -ForegroundColor Yellow
 }
 
 # Criar arquivo de contexto do agente ativo
@@ -87,6 +92,6 @@ $activeAgentInfo = @{
 
 $activeAgentInfo | Out-File -FilePath $activeAgentPath -Encoding UTF8
 
-Write-Host "`n✅ Agente ativado com sucesso!" -ForegroundColor Green
+Write-Host "`nAgente ativado com sucesso!" -ForegroundColor Green
 Write-Host "Contexto salvo em: .active-agent" -ForegroundColor Yellow
-Write-Host "`n💡 Dica: Use o template de prompt para começar a trabalhar com este agente." -ForegroundColor Cyan
+Write-Host "`nDica: Use o template de prompt para comecar a trabalhar com este agente." -ForegroundColor Cyan

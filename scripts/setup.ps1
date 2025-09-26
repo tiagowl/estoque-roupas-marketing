@@ -1,4 +1,4 @@
-# Script de Configuração do Molde de Agentes
+# Script de Configuracao do Molde de Agentes
 # Configura o ambiente para usar o molde de agentes
 
 param(
@@ -6,9 +6,9 @@ param(
     [string]$ProjectPath = "."
 )
 
-Write-Host "🚀 Configurando Molde de Agentes para: $ProjectName" -ForegroundColor Green
+Write-Host "Configurando Molde de Agentes para: $ProjectName" -ForegroundColor Green
 
-# Criar estrutura de diretórios do projeto
+# Criar estrutura de diretorios do projeto
 $projectDirs = @(
     "docs",
     "src/frontend",
@@ -22,11 +22,11 @@ foreach ($dir in $projectDirs) {
     $fullPath = Join-Path $ProjectPath $dir
     if (!(Test-Path $fullPath)) {
         New-Item -ItemType Directory -Path $fullPath -Force | Out-Null
-        Write-Host "✅ Criado diretório: $dir" -ForegroundColor Yellow
+        Write-Host "Criado diretorio: $dir" -ForegroundColor Yellow
     }
 }
 
-# Copiar arquivos de configuração
+# Copiar arquivos de configuracao
 $configFiles = @(
     "agents/product-owner/config.json",
     "agents/architect/config.json", 
@@ -47,11 +47,11 @@ foreach ($configFile in $configFiles) {
     
     if (Test-Path $sourcePath) {
         Copy-Item $sourcePath $destPath -Force
-        Write-Host "✅ Copiado: $configFile" -ForegroundColor Yellow
+        Write-Host "Copiado: $configFile" -ForegroundColor Yellow
     }
 }
 
-# Criar arquivo de configuração do projeto
+# Criar arquivo de configuracao do projeto
 $projectConfig = @{
     project = @{
         name = $ProjectName
@@ -77,37 +77,37 @@ $projectConfig = @{
 $projectConfigPath = Join-Path $ProjectPath "agent-project.json"
 $projectConfig | Out-File -FilePath $projectConfigPath -Encoding UTF8
 
-Write-Host "✅ Configuração do projeto criada: agent-project.json" -ForegroundColor Yellow
+Write-Host "Configuracao do projeto criada: agent-project.json" -ForegroundColor Yellow
 
 # Criar arquivo .cursorrules
 $cursorRules = @"
-# Configuração do Molde de Agentes
+# Configuracao do Molde de Agentes
 
-## Agentes Disponíveis
+## Agentes Disponiveis
 - Product Owner: Define requisitos e prioridades
 - Arquiteto: Projeta arquitetura do sistema  
-- Frontend Dev: Implementa interface do usuário
-- Backend Dev: Desenvolve APIs e lógica de negócio
+- Frontend Dev: Implementa interface do usuario
+- Backend Dev: Desenvolve APIs e logica de negocio
 - DevOps: Gerencia infraestrutura e deploy
 - Tester: Executa testes e garante qualidade
-- UX: Foca na experiência do usuário
+- UX: Foca na experiencia do usuario
 
 ## Como Usar
 1. Use o comando: ./scripts/activate-agent.ps1 [agent-name]
 2. Siga os templates em templates/
 3. Use os workflows em workflows/
 
-## Comandos Disponíveis
-- setup.ps1: Configuração inicial
-- activate-agent.ps1: Ativar um agente específico
+## Comandos Disponiveis
+- setup.ps1: Configuracao inicial
+- activate-agent.ps1: Ativar um agente especifico
 - start-workflow.ps1: Iniciar um workflow
-- list-agents.ps1: Listar agentes disponíveis
+- list-agents.ps1: Listar agentes disponiveis
 "@
 
 $cursorRulesPath = Join-Path $ProjectPath ".cursorrules"
 $cursorRules | Out-File -FilePath $cursorRulesPath -Encoding UTF8
 
-Write-Host "✅ Arquivo .cursorrules criado" -ForegroundColor Yellow
+Write-Host "Arquivo .cursorrules criado" -ForegroundColor Yellow
 
-Write-Host "`n🎉 Configuração concluída!" -ForegroundColor Green
-Write-Host "Para começar, use: ./scripts/activate-agent.ps1 [agent-name]" -ForegroundColor Cyan
+Write-Host "`nConfiguracao concluida!" -ForegroundColor Green
+Write-Host "Para comecar, use: ./scripts/activate-agent.ps1 [agent-name]" -ForegroundColor Cyan

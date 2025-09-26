@@ -1,5 +1,5 @@
 # Script para Iniciar um Workflow
-# Inicia um workflow específico com os agentes necessários
+# Inicia um workflow especifico com os agentes necessarios
 
 param(
     [Parameter(Mandatory=$true)]
@@ -7,43 +7,48 @@ param(
     [string]$ProjectPath = "."
 )
 
-# Lista de workflows disponíveis
+# Lista de workflows disponiveis
 $availableWorkflows = @{
     "complete-development" = "Desenvolvimento Completo"
     "feature-development" = "Desenvolvimento de Feature"
-    "bug-fixing" = "Correção de Bugs"
+    "bug-fixing" = "Correcao de Bugs"
     "code-review" = "Code Review"
 }
 
 # Verificar se o workflow existe
 if (!$availableWorkflows.ContainsKey($WorkflowName)) {
-    Write-Host "❌ Workflow '$WorkflowName' não encontrado!" -ForegroundColor Red
-    Write-Host "Workflows disponíveis:" -ForegroundColor Yellow
+    Write-Host "Workflow '$WorkflowName' nao encontrado!" -ForegroundColor Red
+    Write-Host "Workflows disponiveis:" -ForegroundColor Yellow
     foreach ($workflow in $availableWorkflows.GetEnumerator()) {
         Write-Host "  - $($workflow.Key): $($workflow.Value)" -ForegroundColor Cyan
     }
     exit 1
 }
 
-Write-Host "🔄 Iniciando workflow: $($availableWorkflows[$WorkflowName])" -ForegroundColor Green
+Write-Host "Iniciando workflow: $($availableWorkflows[$WorkflowName])" -ForegroundColor Green
 
-# Carregar configuração do workflow
+# Carregar configuracao do workflow
 $workflowPath = Join-Path $PSScriptRoot "..\workflows\$WorkflowName.json"
 if (Test-Path $workflowPath) {
-    $workflow = Get-Content $workflowPath | ConvertFrom-Json
-    Write-Host "✅ Configuração do workflow carregada" -ForegroundColor Yellow
+    try {
+        $workflow = Get-Content $workflowPath -Encoding UTF8 | ConvertFrom-Json
+        Write-Host "Configuracao do workflow carregada" -ForegroundColor Yellow
+    } catch {
+        Write-Host "Erro ao carregar workflow: $($_.Exception.Message)" -ForegroundColor Red
+        exit 1
+    }
     
-    # Exibir informações do workflow
-    Write-Host "`n📋 Informações do Workflow:" -ForegroundColor Cyan
+    # Exibir informacoes do workflow
+    Write-Host "`nInformacoes do Workflow:" -ForegroundColor Cyan
     Write-Host "Nome: $($workflow.workflow.name)" -ForegroundColor White
-    Write-Host "Descrição: $($workflow.workflow.description)" -ForegroundColor White
+    Write-Host "Descricao: $($workflow.workflow.description)" -ForegroundColor White
     
     # Exibir fases do workflow
-    Write-Host "`n📅 Fases do Workflow:" -ForegroundColor Cyan
+    Write-Host "`nFases do Workflow:" -ForegroundColor Cyan
     foreach ($phase in $workflow.workflow.phases) {
-        Write-Host "`n🔹 $($phase.phase)" -ForegroundColor Yellow
+        Write-Host "`n$($phase.phase)" -ForegroundColor Yellow
         Write-Host "   Agentes: $($phase.agents -join ', ')" -ForegroundColor White
-        Write-Host "   Duração: $($phase.duration)" -ForegroundColor White
+        Write-Host "   Duracao: $($phase.duration)" -ForegroundColor White
         Write-Host "   Atividades:" -ForegroundColor White
         foreach ($activity in $phase.activities) {
             Write-Host "     - $activity" -ForegroundColor Gray
@@ -54,9 +59,9 @@ if (Test-Path $workflowPath) {
         }
     }
     
-    # Exibir matriz de colaboração
+    # Exibir matriz de colaboracao
     if ($workflow.workflow.collaboration_matrix) {
-        Write-Host "`n🤝 Matriz de Colaboração:" -ForegroundColor Cyan
+        Write-Host "`nMatriz de Colaboracao:" -ForegroundColor Cyan
         foreach ($agent in $workflow.workflow.collaboration_matrix.PSObject.Properties) {
             Write-Host "  $($agent.Name): $($agent.Value -join ', ')" -ForegroundColor White
         }
@@ -75,17 +80,17 @@ if (Test-Path $workflowPath) {
     
     $activeWorkflowInfo | Out-File -FilePath $activeWorkflowPath -Encoding UTF8
     
-    Write-Host "`n✅ Workflow iniciado com sucesso!" -ForegroundColor Green
+    Write-Host "`nWorkflow iniciado com sucesso!" -ForegroundColor Green
     Write-Host "Contexto salvo em: .active-workflow" -ForegroundColor Yellow
     
-    # Sugerir próximos passos
+    # Sugerir proximos passos
     $firstPhase = $workflow.workflow.phases[0]
-    Write-Host "`n🚀 Próximos Passos:" -ForegroundColor Cyan
+    Write-Host "`nProximos Passos:" -ForegroundColor Cyan
     Write-Host "1. Ative os agentes da primeira fase: $($firstPhase.agents -join ', ')" -ForegroundColor White
     Write-Host "2. Use: ./scripts/activate-agent.ps1 [agent-name]" -ForegroundColor White
     Write-Host "3. Siga as atividades da fase: $($firstPhase.phase)" -ForegroundColor White
     
 } else {
-    Write-Host "❌ Arquivo de workflow não encontrado: $workflowPath" -ForegroundColor Red
+    Write-Host "Arquivo de workflow nao encontrado: $workflowPath" -ForegroundColor Red
     exit 1
 }
