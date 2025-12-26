@@ -1,0 +1,50 @@
+# Dependencies
+node_modules/
+
+# Production build
+build/
+dist/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+.data/
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Strapi
+.strapi/
+.cache/
+.tmp/
+exports/
+
+# Testing
+coverage/
+.nyc_output/
+
+# Misc
+*.pem
+*.key
+

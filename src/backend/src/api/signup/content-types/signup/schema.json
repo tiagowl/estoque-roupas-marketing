@@ -1,0 +1,55 @@
+{
+  "kind": "collectionType",
+  "collectionName": "signups",
+  "info": {
+    "singularName": "signup",
+    "pluralName": "signups",
+    "displayName": "Signup",
+    "description": "Cadastros de usuários interessados no produto"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nome": {
+      "type": "string",
+      "required": true,
+      "minLength": 2,
+      "maxLength": 255
+    },
+    "email": {
+      "type": "email",
+      "required": true,
+      "unique": true,
+      "maxLength": 255
+    },
+    "nomeLoja": {
+      "type": "string",
+      "required": true,
+      "minLength": 2,
+      "maxLength": 255
+    },
+    "quantidadeFuncionarios": {
+      "type": "integer",
+      "required": true,
+      "min": 1
+    },
+    "endereco": {
+      "type": "component",
+      "repeatable": false,
+      "component": "endereco.endereco",
+      "required": true
+    },
+    "plano": {
+      "type": "enumeration",
+      "enum": [
+        "gratuito",
+        "premium"
+      ],
+      "required": true,
+      "default": "gratuito"
+    }
+  }
+}
+

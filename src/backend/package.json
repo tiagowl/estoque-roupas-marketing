@@ -1,0 +1,34 @@
+{
+  "name": "estoque-roupas-backend",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Backend Strapi 5 para site de marketing do micro SaaS de controle de estoque",
+  "scripts": {
+    "develop": "strapi develop",
+    "start": "strapi start",
+    "build": "strapi build",
+    "strapi": "strapi"
+  },
+  "dependencies": {
+    "@strapi/strapi": "^5.0.0",
+    "@strapi/plugin-users-permissions": "^5.0.0",
+    "@strapi/plugin-i18n": "^5.0.0",
+    "pg": "^8.11.3",
+    "better-sqlite3": "^9.2.2"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0"
+  },
+  "author": {
+    "name": "Equipe de Desenvolvimento"
+  },
+  "strapi": {
+    "uuid": "generated-on-setup"
+  },
+  "engines": {
+    "node": ">=18.0.0 <=20.x.x",
+    "npm": ">=6.0.0"
+  },
+  "license": "MIT"
+}
+

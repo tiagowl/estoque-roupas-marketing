@@ -1,0 +1,41 @@
+{
+  "collectionName": "components_endereco_enderecos",
+  "info": {
+    "displayName": "Endereço",
+    "description": "Componente para armazenar informações de endereço"
+  },
+  "options": {},
+  "attributes": {
+    "cep": {
+      "type": "string",
+      "required": true,
+      "minLength": 8,
+      "maxLength": 8
+    },
+    "logradouro": {
+      "type": "string",
+      "required": true,
+      "minLength": 2
+    },
+    "bairro": {
+      "type": "string",
+      "required": true,
+      "minLength": 2
+    },
+    "cidade": {
+      "type": "string",
+      "required": true,
+      "minLength": 2
+    },
+    "estado": {
+      "type": "string",
+      "required": true,
+      "minLength": 2,
+      "maxLength": 2
+    },
+    "complemento": {
+      "type": "string"
+    }
+  }
+}
+
