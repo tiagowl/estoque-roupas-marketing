@@ -55,6 +55,7 @@ Analise os seguintes requisitos e crie user stories detalhadas:
 - Ao enviar um formulario, mandar os dados para o backend;
 - O backend sera feito com o cms Strapi 5;
 - O frontend sera feito com o framework next do react; 
+- o banco de dados sera postgresql;
 
 
 
